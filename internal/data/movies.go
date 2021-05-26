@@ -1,6 +1,7 @@
 package data
 
 import (
+	"database/sql"
 	"time"
 
 	"yogan.dev/greenlight/internal/validator"
@@ -28,4 +29,24 @@ func ValidateMovie(v *validator.Validator, input *Movie) {
 	v.Check(len(input.Genres) >= 1, "genres", "must contain at least one genre")
 	v.Check(len(input.Genres) <= 5, "genres", "must not contain more than 5 genres")
 	v.Check(validator.Unqiue(input.Genres), "genres", "must not contain duplicate values")
+}
+
+type MovieModel struct {
+	DB *sql.DB
+}
+
+func (m MovieModel) Insert(movie *Movie) error {
+	return nil
+}
+
+func (m MovieModel) Get(id int64) (*Movie, error) {
+	return nil, nil
+}
+
+func (m MovieModel) Update(movie *Movie) error {
+	return nil
+}
+
+func (m MovieModel) Delete(id int64) error {
+	return nil
 }
