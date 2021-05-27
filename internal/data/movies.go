@@ -90,10 +90,12 @@ func (m MovieModel) Get(id int64) (*Movie, error) {
 }
 
 func (m MovieModel) GetAll(title string, genres []string, filters Filters) ([]*Movie, error) {
+	// This query is Postgres specific, it involves vectoring for
+	// full-text search, and filtering. Please adapt based on data store.
 	query := `
 	SELECT id, created_at, title, year, runtime, genres, version
 	FROM movies
-	WHERE (LOWER(title) = LOWER($1) OR $1 = '')
+	WHERE (to_tsvector('simple', title) @@ plainto_tsquery('simple', $1) OR $1 = '')
 	AND (genres @> $2 OR $2 = '{}')
 	ORDER BY id`
 
